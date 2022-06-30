@@ -1,15 +1,20 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import Home from '../views/Home.vue';
-// import  'bootstrap/dist/css/bootstrap.css'
-// import 'bootstrap-icons/font/bootstrap-icons.css';
-// import VueCompositionAPI from '@vue/composition-api'
-// import 'ant-design-vue/dist/antd.css';
-// import { Button } from 'ant-design-vue';
+import Home from '@/views/Home.vue';
+import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap-icons/font/bootstrap-icons.css';
+import VueCompositionAPI from '@vue/composition-api';
+import 'ant-design-vue/dist/antd.css';
+import {
+  Button, Input, Table, Modal,
+} from 'ant-design-vue';
 
 Vue.use(VueRouter);
-// Vue.use(VueCompositionAPI)
-// Vue.use(Button);
+Vue.use(VueCompositionAPI);
+Vue.use(Button);
+Vue.use(Input);
+Vue.use(Table);
+Vue.use(Modal);
 
 const routes = [
   {
