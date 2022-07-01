@@ -1,7 +1,7 @@
 <template>
   <div class="p-4 d-flex">
     <img alt="logo" src="../assets/ic-logo.png" class="me-5" />
-    <a-button @click="showModal">
+    <a-button @click="showModal" class="d-flex align-items-center">
       <img alt="Icone Plus" src="../assets/ic-plus.png" class="me-2" />
       Criar contato
     </a-button>
@@ -15,26 +15,27 @@
     <a-modal
       v-model="visible"
       title="Criar novo contato"
-      ok="handleOk"
+      @ok="handleOk"
       cancelText="Cancelar"
       okText="Salvar"
+      class="bg_modal"
+      width="27rem"
+      :closable="false"
+      :ok-button-props="{ disabled: true }"
     >
-      <span>Nome</span>
-      <a-input v-model="name" />
-      <span>E-mail</span>
-      <a-input v-model="email" a />
-      <span>Telefone</span>
-      <a-input v-model="phone" />
+      <span class="d-block">Nome</span>
+      <a-input v-model="name" class="input-modal" />
+      <span class="d-block">E-mail</span>
+      <a-input v-model="email" class="input-modal" />
+      <span class="d-block">Telefone</span>
+      <a-input v-model="phone" class="input-modal-phone" />
     </a-modal>
   </div>
 </template>
 <script>
 import { ref } from "@vue/composition-api";
-// import Modal from "@/components/Modal.vue";
 
 export default {
-  // components: { Modal },
-
   setup() {
     const visible = ref(false);
     const name = ref("");
@@ -42,8 +43,8 @@ export default {
     const phone = ref("");
 
     const showModal = () => {
-      visible.value = true;
       console.log("clicou");
+      visible.value = true;
     };
 
     const handleOk = () => {
@@ -90,5 +91,38 @@ export default {
 
 .ant-modal-close {
   display: none;
+}
+.ant-modal {
+  width: 27rem;
+  height: 21.375rem;
+  margin: 10.625rem 10.438rem 1.437rem 30.375rem;
+  padding: 1rem 0;
+  border-radius: 16px;
+  box-shadow: 0 16px 10px 0;
+}
+
+.input-modal {
+  width: 24rem;
+  height: 2rem;
+  margin: 0.25rem;
+  border-radius: 4px;
+  border: solid 1px #c0c3d2;
+  background-color: #ffffff;
+}
+.input-modal-phone {
+  width: 8rem;
+  height: 2rem;
+  margin: 0.25rem;
+  border-radius: 4px;
+  border: solid 1px #c0c3d2;
+  background-color: #ffffff;
+}
+.bg-modal {
+  width: 27rem;
+  height: 21.375rem;
+  margin: 10.625rem 10.438rem 1.437rem 30.375rem;
+  padding: 1rem 0;
+  border-radius: 16px;
+  box-shadow: 0 16px 10px 0 rgba(0, 0, 0, 0.16);
 }
 </style>
