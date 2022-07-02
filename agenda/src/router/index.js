@@ -8,7 +8,9 @@ import 'ant-design-vue/dist/antd.css';
 import {
   Button, Input, Table, Modal,
 } from 'ant-design-vue';
+import VueMask from 'v-mask';
 
+Vue.use(VueMask);
 Vue.use(VueRouter);
 Vue.use(VueCompositionAPI);
 Vue.use(Button);

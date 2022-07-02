@@ -32,23 +32,27 @@
         </a-table-column>
       </template>
     </a-table>
+
     <a-modal
       v-model="visible"
+      :ok-button-props="{ props: { disabled: true } }"
       title="Criar novo contato"
       @ok="handleAdd"
       cancelText="Cancelar"
       okText="Salvar"
-      class="bg_modal"
       width="27rem"
       :closable="false"
-      :ok-button-props="{ disabled: true }"
     >
       <span class="d-block">Nome</span>
       <a-input v-model="name" class="input-modal" />
       <span class="d-block">E-mail</span>
       <a-input v-model="email" class="input-modal" />
       <span class="d-block">Telefone</span>
-      <a-input v-model="phone" class="input-modal-phone" />
+      <a-input
+        v-model="phone"
+        v-mask="'(##) #########'"
+        class="input-modal-phone"
+      />
     </a-modal>
   </div>
 </template>
@@ -56,17 +60,22 @@
 import { defineComponent, ref, computed } from "@vue/composition-api";
 
 export default defineComponent({
-  setup() {
+  setup(props) {
     const visible = ref(false);
     const name = ref("");
     const email = ref("");
     const phone = ref("");
-
+    const { disabled } = props;
     const showModal = () => {
       visible.value = true;
     };
 
     const columns = [
+      {
+        dataIndex: "letter",
+        key: "letter",
+        width: "5%",
+      },
       {
         dataIndex: "contacts",
         name: "contacts",
@@ -88,7 +97,7 @@ export default defineComponent({
       },
       {
         key: "action",
-        width: "15%",
+        width: "20%",
         dataIndex: "action",
       },
     ];
@@ -101,13 +110,18 @@ export default defineComponent({
       visible.value = false;
       const newData = {
         key: `${count.value}`,
-        contacts: `${name.value.substr(0, 1)} ${name.value}`,
+        letter: `${name.value.substr(0, 1)} `,
+        contacts: `${name.value}`,
         email: `${email.value}`,
         phone: `${phone.value}`,
         // action: `${''}`,
       };
       data.value.push(newData);
     };
+
+    console.log(props.disabled);
+
+    // watch(name.value, (newName, oldName) => console.log(newName, oldName));
 
     return {
       columns,
@@ -118,6 +132,7 @@ export default defineComponent({
       name,
       email,
       phone,
+      disabled,
     };
   },
 });
@@ -162,6 +177,10 @@ export default defineComponent({
   height: 1.5rem;
   margin: 0 1rem 0 0;
   padding: 0.188rem 0.313rem 0.125rem 0.375rem;
+  background-color: #fa7268;
+}
+
+.ant-modal-footer .ant-btn-primary {
   background-color: #fa7268;
 }
 </style>
