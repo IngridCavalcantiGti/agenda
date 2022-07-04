@@ -19,8 +19,6 @@
   </div>
 </template>
 <script>
-// import { ref } from "@vue/composition-api";
-
 export default {
   props: { isAddContactVisible: { type: Boolean } },
   setup() {},

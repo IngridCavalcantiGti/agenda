@@ -2,8 +2,17 @@
   <div>
     <a-table :columns="columns" :dataSource="data">
       <template slot="action" slot-scope="text, record">
-        <button @click="(event) => $emit('clickEdit', { event, edit: record })">
-          Editar
+        <button
+          @click="(event) => $emit('clickEdit', { event, edit: record })"
+          class="btn-custom"
+        >
+          <i class="bi bi-pencil"></i>
+        </button>
+        <button
+          @click="(event) => $emit('clickDelete', { event, delete: record })"
+          class="btn-custom"
+        >
+          <i class="bi bi-trash3"></i>
         </button>
       </template>
     </a-table>
@@ -99,5 +108,10 @@ export default {
 
 .ant-modal-footer .ant-btn-primary {
   background-color: #fa7268;
+}
+
+.btn-custom {
+  background-color: transparent;
+  border: none;
 }
 </style>

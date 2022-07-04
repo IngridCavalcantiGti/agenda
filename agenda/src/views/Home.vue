@@ -1,11 +1,16 @@
 <template>
   <div class="home">
     <Header class="mb-5" @click="showModal" :isAddContactVisible="hasData" />
-    <Table :data="data" v-if="hasData" @clickEdit="showModal" />
+    <Table
+      :data="data"
+      v-if="hasData"
+      @clickEdit="showModal"
+      @clickDelete="showModalDelete"
+    />
     <EmptyData v-else @click="showModal" />
     <a-modal
       v-model="visible"
-      :ok-button-props="{ props: { disabled: true } }"
+      :ok-button-props="{ props: { disabled: isDisabled } }"
       :title="titleModal"
       @ok="handleAdd"
       cancelText="Cancelar"
@@ -23,6 +28,17 @@
         v-mask="'(##) #########'"
         class="input-modal-phone"
       />
+    </a-modal>
+    <a-modal
+      v-model="visibleDelete"
+      title="Excluir contato"
+      @ok="handleDelete"
+      cancelText="Cancelar"
+      okText="Excluir"
+      :closable="false"
+      width="27rem"
+    >
+      <span>Deseja realmente excluir o contato?</span>
     </a-modal>
   </div>
 </template>
@@ -47,6 +63,7 @@ export default {
     };
 
     const visible = ref(false);
+    const visibleDelete = ref(false);
     const name = ref("");
     const email = ref("");
     const phone = ref("");
@@ -54,16 +71,28 @@ export default {
     const showModal = ({ edit = false }) => {
       titleModal.value = edit ? "Editar contato" : "Criar novo contato";
       visible.value = true;
+      name.value = "";
+      email.value = "";
+      phone.value = "";
     };
-
+    const showModalDelete = () => {
+      visibleDelete.value = true;
+    };
     const data = ref([
-      // {
-      //   key: 1,
-      //   avatar: `I `,
-      //   contacts: `Ingrid`,
-      //   email: `ingrid@teste`,
-      //   phone: `(81) 999409322`,
-      // },
+      {
+        key: 1,
+        avatar: `I `,
+        contacts: `Ingrid`,
+        email: `ingrid@teste`,
+        phone: `(81) 999409322`,
+      },
+      {
+        key: 2,
+        avatar: `A`,
+        contacts: `Aysha`,
+        email: `Aysha@teste`,
+        phone: `(81) 32656555`,
+      },
     ]);
     const handleAdd = () => {
       visible.value = false;
@@ -79,6 +108,19 @@ export default {
 
     const hasData = computed(() => data.value.length > 0);
 
+    const handleDelete = (idDeleted) => {
+      // data.value[idDeleted].key.splice();
+      visibleDelete.value = false;
+      console.log(data.value[idDeleted].key);
+    };
+
+    const isDisabled = computed(
+      () => !name.value.length
+        && !email.value.length
+        && !phone.value.length
+        && titleModal.value === "Criar novo contato",
+    );
+
     return {
       sendDataTable,
       visible,
@@ -90,6 +132,10 @@ export default {
       data,
       titleModal,
       hasData,
+      visibleDelete,
+      showModalDelete,
+      handleDelete,
+      isDisabled,
     };
   },
 };
