@@ -1,79 +1,24 @@
  <template>
   <div>
-    <div class="d-flex justify-content-center" v-if="data.length < 1">
-      <div>
-        <img
-          alt="Icone Plus"
-          src="../assets/ic-book.png"
-          class="me-2 d-block"
-        />
-        <span class="d-block mt-2 mb-2 text-center"
-          >Nenhum contato foi criado ainda</span
-        >
-        <a-button @click="showModal" class="d-flex align-items-center">
-          <img alt="Icone Plus" src="../assets/ic-plus.png" class="me-2" />
-          Criar contato
-        </a-button>
-      </div>
-    </div>
-
-    <a-table :columns="columns" :dataSource="data" v-if="data.length > 0">
-      <template #bodyCell>
-        <!-- <template v-if="column.key === 'name'">
-          <div class="circle-name"></div>
-        </template> -->
-        <a-table-column key="action">
-          <template #default>
-            <span>
-              <a><i class="bi bi-pencil"></i></a>
-              <a><i class="bi bi-trash3"></i></a>
-            </span>
-          </template>
-        </a-table-column>
+    <a-table :columns="columns" :dataSource="data">
+      <template slot="action" slot-scope="text, record">
+        <button @click="(event) => $emit('clickEdit', { event, edit: record })">
+          Editar
+        </button>
       </template>
     </a-table>
-
-    <a-modal
-      v-model="visible"
-      :ok-button-props="{ props: { disabled: true } }"
-      title="Criar novo contato"
-      @ok="handleAdd"
-      cancelText="Cancelar"
-      okText="Salvar"
-      width="27rem"
-      :closable="false"
-    >
-      <span class="d-block">Nome</span>
-      <a-input v-model="name" class="input-modal" />
-      <span class="d-block">E-mail</span>
-      <a-input v-model="email" class="input-modal" />
-      <span class="d-block">Telefone</span>
-      <a-input
-        v-model="phone"
-        v-mask="'(##) #########'"
-        class="input-modal-phone"
-      />
-    </a-modal>
   </div>
 </template>
 <script>
-import { defineComponent, ref, computed } from "@vue/composition-api";
-
-export default defineComponent({
-  setup(props) {
-    const visible = ref(false);
-    const name = ref("");
-    const email = ref("");
-    const phone = ref("");
-    const { disabled } = props;
-    const showModal = () => {
-      visible.value = true;
-    };
-
+export default {
+  props: {
+    data: { type: Array, required: true },
+  },
+  setup() {
     const columns = [
       {
-        dataIndex: "letter",
-        key: "letter",
+        dataIndex: "avatar",
+        key: "avatar",
         width: "5%",
       },
       {
@@ -99,43 +44,15 @@ export default defineComponent({
         key: "action",
         width: "20%",
         dataIndex: "action",
+        scopedSlots: { customRender: "action" },
       },
     ];
 
-    const data = ref([]);
-
-    const count = computed(() => data.value.length + 1);
-
-    const handleAdd = () => {
-      visible.value = false;
-      const newData = {
-        key: `${count.value}`,
-        letter: `${name.value.substr(0, 1)} `,
-        contacts: `${name.value}`,
-        email: `${email.value}`,
-        phone: `${phone.value}`,
-        // action: `${''}`,
-      };
-      data.value.push(newData);
-    };
-
-    console.log(props.disabled);
-
-    // watch(name.value, (newName, oldName) => console.log(newName, oldName));
-
     return {
       columns,
-      data,
-      showModal,
-      handleAdd,
-      visible,
-      name,
-      email,
-      phone,
-      disabled,
     };
   },
-});
+};
 </script>
 <style scoped>
 .ant-table-column-title {

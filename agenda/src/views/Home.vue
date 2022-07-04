@@ -1,19 +1,96 @@
 <template>
   <div class="home">
-    <Header class="mb-5" />
-    <Table />
+    <Header class="mb-5" @click="showModal" :isAddContactVisible="hasData" />
+    <Table :data="data" v-if="hasData" @clickEdit="showModal" />
+    <EmptyData v-else @click="showModal" />
+    <a-modal
+      v-model="visible"
+      :ok-button-props="{ props: { disabled: true } }"
+      :title="titleModal"
+      @ok="handleAdd"
+      cancelText="Cancelar"
+      okText="Salvar"
+      width="27rem"
+      :closable="false"
+    >
+      <span class="d-block">Nome</span>
+      <a-input v-model="name" class="input-modal" />
+      <span class="d-block">E-mail</span>
+      <a-input v-model="email" class="input-modal" />
+      <span class="d-block">Telefone</span>
+      <a-input
+        v-model="phone"
+        v-mask="'(##) #########'"
+        class="input-modal-phone"
+      />
+    </a-modal>
   </div>
 </template>
 
 <script>
+import { ref, computed } from "@vue/composition-api";
 import Header from "@/components/Header.vue";
 import Table from "@/components/Table.vue";
+import EmptyData from "@/components/EmptyData.vue";
 
 export default {
   name: "Home",
   components: {
     Header,
     Table,
+    EmptyData,
+  },
+
+  setup() {
+    const sendDataTable = () => {
+      console.log("aqui");
+    };
+
+    const visible = ref(false);
+    const name = ref("");
+    const email = ref("");
+    const phone = ref("");
+    const titleModal = ref("");
+    const showModal = ({ edit = false }) => {
+      titleModal.value = edit ? "Editar contato" : "Criar novo contato";
+      visible.value = true;
+    };
+
+    const data = ref([
+      // {
+      //   key: 1,
+      //   avatar: `I `,
+      //   contacts: `Ingrid`,
+      //   email: `ingrid@teste`,
+      //   phone: `(81) 999409322`,
+      // },
+    ]);
+    const handleAdd = () => {
+      visible.value = false;
+      const newData = {
+        key: data.value.length + 1,
+        avatar: `${name.value.substr(0, 1)} `,
+        contacts: `${name.value}`,
+        email: `${email.value}`,
+        phone: `${phone.value}`,
+      };
+      data.value.push(newData);
+    };
+
+    const hasData = computed(() => data.value.length > 0);
+
+    return {
+      sendDataTable,
+      visible,
+      name,
+      email,
+      phone,
+      showModal,
+      handleAdd,
+      data,
+      titleModal,
+      hasData,
+    };
   },
 };
 </script>

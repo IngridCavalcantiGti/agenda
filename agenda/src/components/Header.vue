@@ -1,7 +1,11 @@
 <template>
   <div class="p-4 d-flex">
     <img alt="logo" src="../assets/ic-logo.png" class="me-5" />
-    <a-button @click="showModal" class="d-flex align-items-center">
+    <a-button
+      v-if="isAddContactVisible"
+      @click="(event) => $emit('click', { event })"
+      class="d-flex align-items-center"
+    >
       <img alt="Icone Plus" src="../assets/ic-plus.png" class="me-2" />
       Criar contato
     </a-button>
@@ -12,54 +16,14 @@
         </template>
       </a-input>
     </div>
-    <a-modal
-      v-model="visible"
-      title="Criar novo contato"
-      @ok="handleOk"
-      cancelText="Cancelar"
-      okText="Salvar"
-      class="bg_modal"
-      width="27rem"
-      :closable="false"
-      :ok-button-props="{ disabled: true }"
-    >
-      <span class="d-block">Nome</span>
-      <a-input v-model="name" class="input-modal" />
-      <span class="d-block">E-mail</span>
-      <a-input v-model="email" class="input-modal" />
-      <span class="d-block">Telefone</span>
-      <a-input v-model="phone" class="input-modal-phone" />
-    </a-modal>
   </div>
 </template>
 <script>
-import { ref } from "@vue/composition-api";
+// import { ref } from "@vue/composition-api";
 
 export default {
-  setup() {
-    const visible = ref(false);
-    const name = ref("");
-    const email = ref("");
-    const phone = ref("");
-
-    const showModal = () => {
-      console.log("clicou");
-      visible.value = true;
-    };
-
-    const handleOk = () => {
-      visible.value = false;
-    };
-
-    return {
-      showModal,
-      handleOk,
-      visible,
-      name,
-      email,
-      phone,
-    };
-  },
+  props: { isAddContactVisible: { type: Boolean } },
+  setup() {},
 };
 </script>
 
