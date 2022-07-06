@@ -69,19 +69,7 @@ export default {
   },
 };
 </script>
+
 <style scoped>
-.btn-custom {
-  background-color: transparent;
-  border: none;
-}
-.avatar {
-  background: #fa8d68;
-  color: white;
-  border-radius: 50%;
-  width: 1.5rem;
-  height: 1.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+@import "../components/Table.css";
 </style>

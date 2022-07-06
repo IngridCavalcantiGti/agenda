@@ -1,12 +1,12 @@
 <template>
   <div class="home">
-    <Header class="mb-5" @click="showModal" :isAddContactVisible="hasData" />
+    <Header class="mb-2" @click="showModal" :isAddContactVisible="hasData" />
     <Table
       :data="data"
       v-if="hasData"
       @clickEdit="showModal"
       @clickDelete="showModalDelete"
-      class="custom-row-hover"
+      :class="{ active: isActive }"
     />
 
     <EmptyData v-else @click="showModal" />
@@ -61,6 +61,7 @@ export default {
   },
 
   setup() {
+    const isActive = ref(false);
     const visible = ref(false);
     const visibleDelete = ref(false);
     const name = ref("");
@@ -117,7 +118,12 @@ export default {
         data.value.splice(position, 1, newData);
       } else {
         data.value.push(newData);
+        isActive.value = true;
       }
+      setTimeout(() => {
+        isActive.value = false;
+      }, "10000");
+
       visible.value = false;
       clear();
     };
@@ -150,72 +156,12 @@ export default {
       handleDelete,
       isDisabled,
       clear,
+      isActive,
     };
   },
 };
 </script>
 
 <style>
-.ant-table-column-title {
-  color: #9198af;
-}
-.ant-table-thead > tr > th {
-  background: #ffffff !important;
-  height: 2.5rem !important;
-}
-
-.ant-table-tbody > tr:hover:not(.ant-table-expanded-row) > td {
-  background: #fff3f2 !important;
-}
-
-.ant-table-wrapper {
-  border: 1px solid #e1e1e1;
-  border-radius: 4px;
-  margin-left: 1rem;
-  margin-right: 1rem;
-}
-
-.ant-table-tbody {
-  height: 2.5rem;
-  background: #ffffff;
-}
-
-body {
-  background-color: #f8f9fd !important;
-}
-
-.ant-modal-content {
-  border-radius: 16px !important;
-}
-.ant-modal-header {
-  height: 2.9rem;
-  border-radius: 16px !important;
-}
-.ant-modal-title {
-  border-radius: 16px !important;
-}
-
-.ant-modal-content .ant-btn-primary,
-.ant-modal-content .ant-btn-primary:hover,
-.ant-modal-content .ant-btn-primary:active {
-  border-radius: 50px;
-  background-color: #fa7268;
-  border: #fa7268;
-}
-
-.ant-modal-content .ant-btn:nth-child(1) {
-  border: transparent;
-  background-color: white;
-  color: #fa7268;
-}
-.ant-modal-content .input-modal {
-  background-color: #ffffff !important;
-}
-.ant-modal-content .input-modal-phone {
-  background-color: #ffffff !important;
-  width: 8rem;
-}
-.ant-modal-body {
-  color: #2a2d3b;
-}
+@import "../views/Home.css";
 </style>

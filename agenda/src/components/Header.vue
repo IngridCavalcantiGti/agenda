@@ -30,16 +30,6 @@ export default {
 };
 </script>
 
-<style >
-.ant-input {
-  background-color: #e4e7f4 !important;
-  height: 2rem;
-  border-radius: 4px;
-  color: #9198af;
-}
-
-.btn-custom {
-  background-color: transparent;
-  border: none;
-}
+<style>
+@import "../components/Header.css";
 </style>
