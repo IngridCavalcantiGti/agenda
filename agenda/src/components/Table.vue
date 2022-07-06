@@ -1,19 +1,24 @@
  <template>
   <div>
-    <a-table :columns="columns" :dataSource="data">
+    <a-table :columns="columns" :dataSource="data" :pagination="false">
+      <template slot="avatar" slot-scope="text, record">
+        <span class="avatar"> {{ record.avatar }}</span>
+      </template>
       <template slot="action" slot-scope="text, record">
-        <button
-          @click="(event) => $emit('clickEdit', { event, edit: record })"
-          class="btn-custom"
-        >
-          <i class="bi bi-pencil"></i>
-        </button>
-        <button
-          @click="(event) => $emit('clickDelete', { event, delete: record })"
-          class="btn-custom"
-        >
-          <i class="bi bi-trash3"></i>
-        </button>
+        <div class="d-flex justify-content-end">
+          <button
+            @click="(event) => $emit('clickEdit', { event, edit: record })"
+            class="btn-custom"
+          >
+            <i class="bi bi-pencil"></i>
+          </button>
+          <button
+            @click="(event) => $emit('clickDelete', { event, key: record.key })"
+            class="btn-custom"
+          >
+            <i class="bi bi-trash3"></i>
+          </button>
+        </div>
       </template>
     </a-table>
   </div>
@@ -29,10 +34,11 @@ export default {
         dataIndex: "avatar",
         key: "avatar",
         width: "5%",
+        scopedSlots: { customRender: "avatar" },
       },
       {
-        dataIndex: "contacts",
-        name: "contacts",
+        dataIndex: "name",
+        name: "name",
         title: "Contatos",
         key: "name",
         width: "25%",
@@ -64,6 +70,11 @@ export default {
 };
 </script>
 <style scoped>
+.ant-table-wrapper {
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
+
 .ant-table-column-title {
   color: #9198af;
 }
@@ -75,14 +86,11 @@ export default {
 .ant-table-thead {
   background-color: #ffffff;
 }
-.ant-table-wrapper {
-  width: 88rem;
-  margin-left: 1rem;
-}
-.ant-pagination {
+
+/* .ant-pagination {
   display: none;
-}
-.ant-btn {
+} */
+/* .ant-btn {
   background-color: #dbff90;
   color: #fa7268;
   border-radius: 20px;
@@ -96,22 +104,32 @@ export default {
   background-color: #dbff90;
   color: #fa7268;
   border-radius: 20px;
-}
+} */
 
-.circle-name {
+/* .circle-name {
   width: 1.5rem;
   height: 1.5rem;
   margin: 0 1rem 0 0;
   padding: 0.188rem 0.313rem 0.125rem 0.375rem;
   background-color: #fa7268;
-}
+} */
 
-.ant-modal-footer .ant-btn-primary {
+/* .ant-modal-footer .ant-btn-primary {
   background-color: #fa7268;
-}
+} */
 
 .btn-custom {
   background-color: transparent;
   border: none;
+}
+.avatar {
+  background: #fa8d68;
+  color: white;
+  border-radius: 50%;
+  width: 1.5rem;
+  height: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>

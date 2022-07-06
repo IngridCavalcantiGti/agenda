@@ -1,18 +1,26 @@
 <template>
   <div class="home">
-    <Header class="mb-5" @click="showModal" :isAddContactVisible="hasData" />
+    <Header
+      class="mb-5"
+      @click="showModal"
+      :isAddContactVisible="hasData"
+      @clickSearch="inputSearch"
+      :input="searchValue"
+    />
     <Table
       :data="data"
       v-if="hasData"
       @clickEdit="showModal"
       @clickDelete="showModalDelete"
     />
+
     <EmptyData v-else @click="showModal" />
     <a-modal
       v-model="visible"
       :ok-button-props="{ props: { disabled: isDisabled } }"
       :title="titleModal"
       @ok="handleAdd"
+      @cancel="clear"
       cancelText="Cancelar"
       okText="Salvar"
       width="27rem"
@@ -58,8 +66,9 @@ export default {
   },
 
   setup() {
-    const sendDataTable = () => {
-      console.log("aqui");
+    const searchValue = ref("teste dddddddd");
+    const inputSearch = () => {
+      console.log(searchValue.value);
     };
 
     const visible = ref(false);
@@ -67,62 +76,78 @@ export default {
     const name = ref("");
     const email = ref("");
     const phone = ref("");
-    const titleModal = ref("");
+    const isEdit = ref(false);
+    const currentKey = ref(null);
+    const titleModal = computed(() => (isEdit.value ? "Editar contato" : "Criar novo contato"));
     const showModal = ({ edit = false }) => {
-      titleModal.value = edit ? "Editar contato" : "Criar novo contato";
       visible.value = true;
+      isEdit.value = Boolean(edit);
+      if (isEdit.value) {
+        currentKey.value = edit.key;
+        name.value = edit.name;
+        email.value = edit.email;
+        phone.value = edit.phone;
+      }
+    };
+
+    const keyToDelete = ref();
+    const showModalDelete = ({ key }) => {
+      keyToDelete.value = key;
+      visibleDelete.value = true;
+    };
+
+    const data = ref([]);
+
+    const clear = () => {
       name.value = "";
       email.value = "";
       phone.value = "";
+      currentKey.value = null;
     };
-    const showModalDelete = () => {
-      visibleDelete.value = true;
-    };
-    const data = ref([
-      {
-        key: 1,
-        avatar: `I `,
-        contacts: `Ingrid`,
-        email: `ingrid@teste`,
-        phone: `(81) 999409322`,
-      },
-      {
-        key: 2,
-        avatar: `A`,
-        contacts: `Aysha`,
-        email: `Aysha@teste`,
-        phone: `(81) 32656555`,
-      },
-    ]);
+
     const handleAdd = () => {
-      visible.value = false;
+      let newKey = 1;
+      if (data.value.length) {
+        // eslint-disable-next-line max-len
+        const item = data.value
+          .map((dataItem) => dataItem.key)
+          .reduce((oldValue, currentValue) => Math.max(oldValue, currentValue));
+        console.log(item);
+        newKey = item + 1;
+      }
       const newData = {
-        key: data.value.length + 1,
+        key: currentKey.value ?? newKey,
         avatar: `${name.value.substr(0, 1)} `,
-        contacts: `${name.value}`,
+        name: `${name.value}`,
         email: `${email.value}`,
         phone: `${phone.value}`,
       };
-      data.value.push(newData);
+
+      if (isEdit.value) {
+        const position = data.value.map((item) => item.key).indexOf(currentKey.value);
+        data.value.splice(position, 1, newData);
+      } else {
+        data.value.push(newData);
+      }
+      visible.value = false;
+      clear();
     };
 
     const hasData = computed(() => data.value.length > 0);
 
-    const handleDelete = (idDeleted) => {
-      // data.value[idDeleted].key.splice();
+    const handleDelete = () => {
+      const position = data.value.map((item) => item.key).indexOf(keyToDelete.value);
+      data.value.splice(position, 1);
+      keyToDelete.value = null;
       visibleDelete.value = false;
-      console.log(data.value[idDeleted].key);
     };
 
     const isDisabled = computed(
-      () => !name.value.length
-        && !email.value.length
-        && !phone.value.length
-        && titleModal.value === "Criar novo contato",
+      () => !name.value.length && !email.value.length && !phone.value.length,
     );
 
     return {
-      sendDataTable,
+      inputSearch,
       visible,
       name,
       email,
@@ -136,15 +161,14 @@ export default {
       showModalDelete,
       handleDelete,
       isDisabled,
+      searchValue,
+      clear,
     };
   },
 };
 </script>
 
 <style>
-/* body {
-  background-color: #f8f9fd !important;
-} */
 .ant-pagination {
   display: none;
 }
@@ -157,36 +181,69 @@ export default {
   height: 2.5rem !important;
 }
 
-/* .ant-table-thead {
-  border: solid 1px #e1e1e1 !important;
-  border-radius: 4px !important;
-} */
 .ant-table-tbody:hover {
   background: #fff3f2;
 }
-/* .ant-table-tbody:active {
-  background: #fff3f2;
-} */
-.ant-modal-content,
-.ant-modal-header {
+
+/* .ant-modal-content, */
+/* .ant-modal-header {
   border-radius: 16px 16px 0 0 !important;
-}
-.home {
-  width: 90rem;
-  height: 64rem;
+} */
+body {
   background-color: #f8f9fd;
 }
 
-.ant-modal-header {
-  height: 2.9rem !important;
-}
-
-.ant-modal-title {
+/* .ant-modal-title {
   font-size: 1rem !important;
   color: #2a2d3b;
+} */
+
+/* .ant-modal-footer {
+  border-radius: 0 0 16px 16px !important;
+} */
+
+/* inicio aqui */
+/* .modal-contact {
+  width: 27rem;
+  height: 21.375rem;
+  margin: 10.625rem 10.438rem 1.437rem 30.375rem;
+  padding: 1rem 0;
+  border-radius: 16px;
+  box-shadow: 0 16px 10px 0 rgba(0, 0, 0, 0.16);
+  background-color: red;
+} */
+
+.ant-modal-content {
+  border-radius: 16px !important;
+}
+.ant-modal-header {
+  height: 2.9rem;
+  border-radius: 16px 16px 0 0 !important;
+}
+.ant-modal-title {
+  border-radius: 16px !important;
+}
+.ant-modal {
+  border-radius: 16px 16px 0 0 !important;
 }
 
+/* testando aqui */
+
+/* .ant-modal-content {
+  background-color: red;
+}
+.ant-modal-body {
+  background-color: blue;
+}
 .ant-modal-footer {
-  border-radius: 0 0 16px 16px !important;
+  background-color: green;
+} */
+.ant-modal-content {
+  background-color: blue;
+}
+
+.ant-modal-content .ant-btn-primary {
+  border-radius: 50px;
+  background-color: #fa7268;
 }
 </style>

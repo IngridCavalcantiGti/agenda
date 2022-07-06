@@ -1,66 +1,60 @@
 <template>
-  <div class="p-4 d-flex">
-    <img alt="logo" src="../assets/ic-logo.png" class="me-5" />
-    <a-button
-      v-if="isAddContactVisible"
+  <div class="p-4 d-flex gap-4">
+    <img alt="logo" src="../assets/ic-logo.png" />
+    <Button
       @click="(event) => $emit('click', { event })"
-      class="d-flex align-items-center"
-    >
-      <img alt="Icone Plus" src="../assets/ic-plus.png" class="me-2" />
-      Criar contato
-    </a-button>
-    <div class="input-w">
-      <a-input placeholder="Buscar..." class="ms-4 input-color">
+      v-if="isAddContactVisible"
+    />
+    <div class="flex-grow-1">
+      <a-input placeholder="Buscar...">
         <template #suffix>
-          <img alt="Icone Search" src="../assets/ic-search.png" class="me-2" />
+          <button
+            @click="(event) => $emit('clickSearch', { event })"
+            class="btn-custom"
+          >
+            <i class="bi bi-search"></i>
+          </button>
         </template>
       </a-input>
     </div>
   </div>
 </template>
 <script>
+import Button from "@/components/Button.vue";
+
+// import { ref } from "@vue/composition-api";
+
 export default {
+  components: {
+    Button,
+  },
   props: { isAddContactVisible: { type: Boolean } },
-  setup() {},
+
+  setup() {
+    // const test = ref("");
+
+    // const search = () => {
+    //   emit("inputSearch");
+    // };
+
+    return {
+      // search,
+      // test,
+    };
+  },
 };
 </script>
 
-<style scoped>
-.ant-btn {
-  background-color: #dbff90;
-  color: #fa7268;
-  border-radius: 20px;
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.16),
-    0 0 0 0.5px rgba(0, 0, 0, 0.08), inset 0 0 0 0.5px rgba(0, 0, 0, 0.08),
-    0 2px 4px 0.5px rgba(0, 0, 0, 0.16);
-  border: none;
-  font-weight: 500;
-}
-.ant-btn:hover {
-  background-color: #dbff90;
-  color: #fa7268;
-  border-radius: 20px;
-}
+<style>
 .ant-input {
   background-color: #e4e7f4;
   height: 2rem;
   border-radius: 4px;
   color: #9198af;
 }
-.input-w {
-  width: 64.5rem;
-}
 
-.ant-modal-close {
-  display: none;
-}
-.ant-modal {
-  width: 27rem;
-  height: 21.375rem;
-  margin: 10.625rem 10.438rem 1.437rem 30.375rem;
-  padding: 1rem 0;
-  border-radius: 16px;
-  box-shadow: 0 16px 10px 0;
+.input-search {
+  background: red;
 }
 
 .input-modal {
@@ -79,12 +73,8 @@ export default {
   border: solid 1px #c0c3d2;
   background-color: #ffffff;
 }
-.bg-modal {
-  width: 27rem;
-  height: 21.375rem;
-  margin: 10.625rem 10.438rem 1.437rem 30.375rem;
-  padding: 1rem 0;
-  border-radius: 16px;
-  box-shadow: 0 16px 10px 0 rgba(0, 0, 0, 0.16);
+.btn-custom {
+  background-color: transparent;
+  border: none;
 }
 </style>
