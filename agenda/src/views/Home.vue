@@ -1,17 +1,12 @@
 <template>
   <div class="home">
-    <Header
-      class="mb-5"
-      @click="showModal"
-      :isAddContactVisible="hasData"
-      @clickSearch="inputSearch"
-      :input="searchValue"
-    />
+    <Header class="mb-5" @click="showModal" :isAddContactVisible="hasData" />
     <Table
       :data="data"
       v-if="hasData"
       @clickEdit="showModal"
       @clickDelete="showModalDelete"
+      class="custom-row-hover"
     />
 
     <EmptyData v-else @click="showModal" />
@@ -28,9 +23,9 @@
     >
       <span class="d-block">Nome</span>
       <a-input v-model="name" class="input-modal" />
-      <span class="d-block">E-mail</span>
+      <span class="d-block mt-2">E-mail</span>
       <a-input v-model="email" class="input-modal" />
-      <span class="d-block">Telefone</span>
+      <span class="d-block mt-2">Telefone</span>
       <a-input
         v-model="phone"
         v-mask="'(##) #########'"
@@ -66,11 +61,6 @@ export default {
   },
 
   setup() {
-    const searchValue = ref("teste dddddddd");
-    const inputSearch = () => {
-      console.log(searchValue.value);
-    };
-
     const visible = ref(false);
     const visibleDelete = ref(false);
     const name = ref("");
@@ -112,7 +102,6 @@ export default {
         const item = data.value
           .map((dataItem) => dataItem.key)
           .reduce((oldValue, currentValue) => Math.max(oldValue, currentValue));
-        console.log(item);
         newKey = item + 1;
       }
       const newData = {
@@ -147,7 +136,6 @@ export default {
     );
 
     return {
-      inputSearch,
       visible,
       name,
       email,
@@ -161,7 +149,6 @@ export default {
       showModalDelete,
       handleDelete,
       isDisabled,
-      searchValue,
       clear,
     };
   },
@@ -169,81 +156,66 @@ export default {
 </script>
 
 <style>
-.ant-pagination {
-  display: none;
-}
 .ant-table-column-title {
   color: #9198af;
-  background-color: #ffffff;
 }
 .ant-table-thead > tr > th {
   background: #ffffff !important;
   height: 2.5rem !important;
 }
 
-.ant-table-tbody:hover {
-  background: #fff3f2;
+.ant-table-tbody > tr:hover:not(.ant-table-expanded-row) > td {
+  background: #fff3f2 !important;
 }
 
-/* .ant-modal-content, */
-/* .ant-modal-header {
-  border-radius: 16px 16px 0 0 !important;
-} */
+.ant-table-wrapper {
+  border: 1px solid #e1e1e1;
+  border-radius: 4px;
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
+
+.ant-table-tbody {
+  height: 2.5rem;
+  background: #ffffff;
+}
+
 body {
-  background-color: #f8f9fd;
+  background-color: #f8f9fd !important;
 }
-
-/* .ant-modal-title {
-  font-size: 1rem !important;
-  color: #2a2d3b;
-} */
-
-/* .ant-modal-footer {
-  border-radius: 0 0 16px 16px !important;
-} */
-
-/* inicio aqui */
-/* .modal-contact {
-  width: 27rem;
-  height: 21.375rem;
-  margin: 10.625rem 10.438rem 1.437rem 30.375rem;
-  padding: 1rem 0;
-  border-radius: 16px;
-  box-shadow: 0 16px 10px 0 rgba(0, 0, 0, 0.16);
-  background-color: red;
-} */
 
 .ant-modal-content {
   border-radius: 16px !important;
 }
 .ant-modal-header {
   height: 2.9rem;
-  border-radius: 16px 16px 0 0 !important;
+  border-radius: 16px !important;
 }
 .ant-modal-title {
   border-radius: 16px !important;
 }
-.ant-modal {
-  border-radius: 16px 16px 0 0 !important;
-}
 
-/* testando aqui */
-
-/* .ant-modal-content {
-  background-color: red;
-}
-.ant-modal-body {
-  background-color: blue;
-}
-.ant-modal-footer {
-  background-color: green;
-} */
-.ant-modal-content {
-  background-color: blue;
-}
-
-.ant-modal-content .ant-btn-primary {
+.ant-modal-content .ant-btn-primary,
+.ant-modal-content .ant-btn-primary:hover,
+.ant-modal-content .ant-btn-primary:active {
   border-radius: 50px;
   background-color: #fa7268;
+  border: #fa7268;
+}
+
+.ant-modal-content .ant-btn:nth-child(1) {
+  border: transparent;
+  background-color: white;
+  color: #fa7268;
+}
+.ant-modal-content .input-modal {
+  background-color: #ffffff !important;
+}
+.ant-modal-content .input-modal-phone {
+  background-color: #ffffff !important;
+  width: 8rem;
+}
+.ant-modal-body {
+  color: #2a2d3b;
 }
 </style>
