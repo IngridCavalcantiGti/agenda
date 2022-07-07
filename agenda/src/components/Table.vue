@@ -1,6 +1,11 @@
  <template>
   <div>
-    <a-table :columns="columns" :dataSource="data" :pagination="false">
+    <a-table
+      :columns="columns"
+      :dataSource="data"
+      :pagination="false"
+      :rowClassName="rowClassName"
+    >
       <template slot="avatar" slot-scope="text, record">
         <span class="avatar"> {{ record.avatar }}</span>
       </template>
@@ -27,6 +32,7 @@
 export default {
   props: {
     data: { type: Array, required: true },
+    rowClassName: { type: Function },
   },
   setup() {
     const columns = [

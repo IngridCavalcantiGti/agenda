@@ -10,10 +10,10 @@
     background: #fff3f2 !important;
 }
 
- .active.ant-table-tbody > tr:hover > td {
+.ant-table-row.active {
     background: #fff3f2 !important;
 }
-  
+
 .ant-table-wrapper {
     border: 1px solid #e1e1e1;
     border-radius: 4px;
@@ -21,10 +21,6 @@
     margin-right: 1rem;
 }
 
-/* .active .ant-table-wrapper .ant-spin-nested-loading .ant-spin-container .ant-table .ant-table-scroll-position-left .ant-table-default .ant-table-content .ant-table-body > tr:hover > td {
-    background-color: red;
-} */
-  
 .ant-table-tbody {
     height: 2.5rem;
     background: #ffffff;

@@ -1,12 +1,15 @@
 <template>
-  <div class="home">
+  <div>
     <Header class="mb-2" @click="showModal" :isAddContactVisible="hasData" />
     <Table
       :data="data"
       v-if="hasData"
       @clickEdit="showModal"
       @clickDelete="showModalDelete"
-      :class="{ active: isActive }"
+      :rowClassName="
+        (record, index) =>
+          isActive && index === data.length - 1 ? 'active' : ''
+      "
     />
 
     <EmptyData v-else @click="showModal" />
@@ -122,7 +125,7 @@ export default {
       }
       setTimeout(() => {
         isActive.value = false;
-      }, "10000");
+      }, 10000);
 
       visible.value = false;
       clear();
